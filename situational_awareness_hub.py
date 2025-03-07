@@ -19,10 +19,15 @@ class SituationalAwarenessHub:
         self.alert_issued = False
         self.restored = False
         
-        # Azure OpenAI configuration
-        self.azure_api_key = os.environ.get("AZURE_API_KEY", "9abc905da5104e8eb8d6ec3ceb27f767")
-        self.azure_endpoint = os.environ.get("AZURE_ENDPOINT", "https://aoai.apim.mitre.org/api-key")
-        self.deployment_name = "gpt-4"
+        # Azure OpenAI configuration - using environment variables only
+        self.azure_api_key = os.environ.get("AZURE_API_KEY")
+        self.azure_endpoint = os.environ.get("AZURE_ENDPOINT")
+        self.deployment_name = os.environ.get("AZURE_DEPLOYMENT_NAME", "gpt-4")
+        
+        # Check if API configuration is available
+        if not self.azure_api_key or not self.azure_endpoint:
+            print("[SA Hub] Warning: Azure OpenAI API credentials not found in environment variables.")
+            print("[SA Hub] AI-powered threat detection will be simulated using local algorithms.")
         
         # Threat intelligence database (simulated)
         self.threat_history = []
@@ -117,31 +122,32 @@ class SituationalAwarenessHub:
             # Prepare the network state as context
             network_context = json.dumps(self.current_network_state, indent=2)
             
-            # Azure OpenAI API call
-            headers = {
-                "Content-Type": "application/json",
-                "api-key": self.azure_api_key
-            }
-            
-            payload = {
-                "messages": [
-                    {"role": "system", "content": "You are an advanced threat analysis system for satellite and ground station communications. Analyze the network state and identify potential threats or vulnerabilities. Respond with JSON containing threat type, probability (0-1), and detailed explanation."},
-                    {"role": "user", "content": f"Analyze this network state data and predict potential threats:\n{network_context}\n\nRespond with only a JSON object containing 'type', 'probability', and 'details' fields."}
-                ],
-                "temperature": 0.3,
-                "max_tokens": 800
-            }
-            
-            # For simulation purposes, we'll generate a response without actually calling the API
-            # In production, uncomment the following code and replace with actual endpoint
-            
-            # response = requests.post(
-            #     f"{self.azure_endpoint}/openai/deployments/{self.deployment_name}/chat/completions?api-version=2023-05-15",
-            #     headers=headers,
-            #     json=payload
-            # )
-            # response_data = response.json()
-            # ai_response = response_data["choices"][0]["message"]["content"]
+            # Check if we have valid API credentials
+            if self.azure_api_key and self.azure_endpoint:
+                # Azure OpenAI API call
+                headers = {
+                    "Content-Type": "application/json",
+                    "api-key": self.azure_api_key
+                }
+                
+                payload = {
+                    "messages": [
+                        {"role": "system", "content": "You are an advanced threat analysis system for satellite and ground station communications. Analyze the network state and identify potential threats or vulnerabilities. Respond with JSON containing threat type, probability (0-1), and detailed explanation."},
+                        {"role": "user", "content": f"Analyze this network state data and predict potential threats:\n{network_context}\n\nRespond with only a JSON object containing 'type', 'probability', and 'details' fields."}
+                    ],
+                    "temperature": 0.3,
+                    "max_tokens": 800
+                }
+                
+                # For production use - uncomment this section
+                # response = requests.post(
+                #     f"{self.azure_endpoint}/openai/deployments/{self.deployment_name}/chat/completions?api-version=2023-05-15",
+                #     headers=headers,
+                #     json=payload
+                # )
+                # response_data = response.json()
+                # ai_response = response_data["choices"][0]["message"]["content"]
+                # Parse AI response here...
             
             # Simulated response for demo purposes
             threat_types = ["Denial of Service", "Signal Jamming", "Bandwidth Saturation", 
