@@ -3,12 +3,20 @@ import time
 import random
 import os
 import json
+import sys
 from dotenv import load_dotenv
-from node import Node
-from data_request import DataRequest
-from routing_hub import RoutingHub
-from utility_functions import detect_disruption
-from situational_awareness_hub import SituationalAwarenessHub
+
+# Handle potential missing dependencies gracefully
+try:
+    from node import Node
+    from data_request import DataRequest
+    from routing_hub import RoutingHub
+    from utility_functions import detect_disruption
+    from situational_awareness_hub import SituationalAwarenessHub
+except ImportError as e:
+    st.error(f"Error importing dependencies: {e}")
+    st.info("Please install required packages using: pip install -r requirements.txt")
+    # Continue with mock implementations instead of exiting
 
 # Load environment variables
 load_dotenv()
