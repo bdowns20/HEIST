@@ -1,6 +1,8 @@
 # main.py
 import time
 import random
+import os
+from dotenv import load_dotenv
 from node import Node
 from data_request import DataRequest
 from routing_hub import RoutingHub
@@ -9,6 +11,9 @@ from web3 import Web3
 from web3.middleware import ExtraDataToPOAMiddleware
 from smart_contract import deploy_contract
 from situational_awareness_hub import SituationalAwarenessHub
+
+# Load environment variables from .env file
+load_dotenv()
 
 def simulate():
     # Connect to Ethereum client (Ganache)

@@ -21,6 +21,8 @@ To run this simulation, ensure you have the following installed and configured:
 - `py-solc-x`
 - `tqdm`
 - `cryptography`
+- `python-dotenv`
+- `requests`
 
 ---
 
@@ -29,7 +31,7 @@ To run this simulation, ensure you have the following installed and configured:
 ### Step 1: Install Python Packages
 Use the following command to install the required Python packages:
 ```
-pip install web3 py-solc-x tqdm colorama cryptography
+pip install -r requirements.txt
 ```
 
 ### Step 2: Install Ganache
@@ -48,6 +50,16 @@ python -m solcx.install v0.8.0
 ---
 
 ## Configuration
+
+### Update `.env` File with API Credentials
+Create or modify the `.env` file in the project root with your Azure OpenAI API credentials:
+```
+# HEIST environment variables
+# Azure OpenAI API credentials
+AZURE_API_KEY=your_api_key_here
+AZURE_ENDPOINT=your_endpoint_here
+AZURE_DEPLOYMENT_NAME=gpt-4
+```
 
 ### Update `main.py` with Accounts and Private Keys
 In the `main.py` file, update the `private_keys` dictionary with the accounts and private keys from your Ganache instance:
@@ -81,9 +93,11 @@ python main.py
 ### FR-01: Detect Disruptions and Reroute
 - **Implementation**: The `detect_disruption()` function monitors node statuses. If a node goes offline (e.g., cable cut), the system reroutes data through available nodes.
 - **Smart Contracts**: The `execute_smart_contract()` function securely manages rerouting decisions.
+- **AI-Enhanced**: The Situational Awareness Hub now uses AI to predict potential disruptions before they occur.
 
 ### FR-02: Monitor Latency and Bandwidth
 - **Implementation**: Nodes track bandwidth usage. The `health_check_node()` function checks node availability and resources before task assignment.
+- **AI-Enhanced**: Predictive analytics now monitor network state and identify bandwidth issues proactively.
 
 ### FR-03: Prioritize Data Streams
 - **Implementation**: Data requests have urgency and importance levels. The `Node` class uses a priority queue to ensure higher-priority tasks are processed first.
@@ -97,6 +111,9 @@ python main.py
 ### FR-08: Secure Rerouting with Smart Contracts
 - **Implementation**: Smart contracts ensure secure rerouting and provide an immutable record of transactions.
 
+### FR-09: AI-Powered Threat Detection
+- **Implementation**: The Situational Awareness Hub now uses Azure OpenAI to analyze network telemetry and predict potential threats before they manifest.
+
 ---
 
 ## Key Performance Parameters
@@ -106,8 +123,10 @@ python main.py
 - **Security Compliance**: Communications are managed via smart contracts, ensuring secure and verifiable transactions.
 - **Error Handling**: Implements retries and error handling for node operations and smart contracts.
 - **Scalability**: Supports additional nodes and requests for testing scalability.
+- **Threat Prediction**: AI-powered system now predicts threats with probability scores and recommends actions.
+- **Threat Resolution**: AI analyzes when a threat situation is improving and predicts resolution.
 
 ---
 
 ## Conclusion
-This simulation provides a foundational understanding of the HEIST architecture, demonstrating data rerouting, system resilience, and compliance with performance metrics.
+This simulation provides a foundational understanding of the HEIST architecture, demonstrating data rerouting, system resilience, and compliance with performance metrics. The integration of AI-powered threat detection and prediction enhances the system's capability to proactively identify and mitigate potential disruptions, representing a significant advancement in telecommunications security.
